@@ -13,11 +13,16 @@ namespace EnigmaMachine
     public partial class Form1 : Form
     {
 
-       // const string testString = "PenguinsKnowYourThoughts";
-        const string testString = "b";
-        const string testStringDecrypt = "FEFVGBRJQNGLHIXMVGMBOPFF";
+    //    const string testString = "PENGUINSKNOWYOURTHOUGHTS"; //for I, II, III ring pos AAA, initial AAA
+      //  const string testString = "b";
+     //   const string testStringDecrypt = "LLOALLRFSHLQZCTFEQEXIKEP";
 
-     //   const string rotorZ =   "01234567890123456789012345";
+
+        const string testString = "PENGU"; //for I, II, III ring pos AAA, initial AAA
+                                                              //  const string testString = "b";
+        const string testStringDecrypt = "LLOAL";
+
+        //   const string rotorZ =   "01234567890123456789012345";
         const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string rotorI =   "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; //I
         const string rotorII =  "AJDKSIRUXBLHWTMCQGZNPYFVOE"; //II
@@ -30,9 +35,9 @@ namespace EnigmaMachine
        //const string rotor1in = "OQSUMKAGWIEYNZVXTRPCLJHFDB"; //III
 
 
-       string rotorLeft = "";
-        string rotorMid = "";
-        string rotorRight = "";
+       //string rotorLeft = "";
+       // string rotorMid = "";
+       // string rotorRight = "";
 
 
         //      Rotor Notch   Effect
@@ -46,7 +51,7 @@ namespace EnigmaMachine
         const string plugboard1 = "";
         const string plugboard2= "";
 
-        const int initialPositionRotor1 = -1;
+        const int initialPositionRotor1 = 0;
         const int initialPositionRotor2 = 0;
         const int initialPositionRotor3 = 0;
 
@@ -60,9 +65,9 @@ namespace EnigmaMachine
         {
             InitializeComponent();
             this.textBox2.Text = testString;
-            rotorLeft = rotorI;
-            rotorMid = rotorII;
-            rotorRight = rotorIII;
+            //rotorLeft = rotorI;
+            //rotorMid = rotorII;
+            //rotorRight = rotorIII;
             erRight = new EnigmaRotor(rotorIII, rotorIIINotch, initialPositionRotor1);
             erMid = new EnigmaRotor(rotorII, rotorIINotch, initialPositionRotor2);
             erLeft = new EnigmaRotor(rotorI, rotorINotch, initialPositionRotor3);
@@ -159,45 +164,29 @@ namespace EnigmaMachine
 
         }
 
-        private char encodeLetterRotorRightIn(char s)
+
+        private char encodeLetterIn(char s, EnigmaRotor er)
         {
             int charVal = ((int)(s) - (int)('A')) % 26;
-            int adjustedVal = (charVal + erRight.currentPos) % 26;
-        //    System.Diagnostics.Debug.WriteLine(currentRotorRight);
-            //  System.Diagnostics.Debug.WriteLine(charVal);
-         //   System.Diagnostics.Debug.WriteLine("idx res rotor 1" + adjustedVal);
-            char sNew = (rotorRight[adjustedVal]);
-          //  System.Diagnostics.Debug.WriteLine( (char)(sNew - currentRotorRight));
-         //   System.Diagnostics.Debug.WriteLine("res rotor 1 " + sNew);
-            return (char)(sNew - erRight.currentPos);
+            int adjustedVal = (charVal + er.currentPos) % 26;
+            char sNew = (er.rotorLayout[adjustedVal]);
+            return (char)(sNew - er.currentPos);
+        }
+
+        private char encodeLetterRotorRightIn(char s)
+        {
+            return encodeLetterIn(s, erRight);
         }
 
         private char encodeLetterRotorMidIn(char s)
         {
-            int charVal = ((int)(s) - (int)('A')) % 26;
-            int adjustedVal = (charVal + erMid.currentPos) % 26;
-          //  System.Diagnostics.Debug.WriteLine(currentRotorMid);
-            //  System.Diagnostics.Debug.WriteLine(charVal);
-         //   System.Diagnostics.Debug.WriteLine("idx res rotor 3" + adjustedVal);
-            char sNew = (rotorMid[adjustedVal]);
-          //  System.Diagnostics.Debug.WriteLine((sNew - currentRotorMid) % 26);
-            //     System.Diagnostics.Debug.WriteLine("res roto 2 " + sNew);
-            return (char)(sNew - erMid.currentPos);
+            return encodeLetterIn(s, erMid);
         }
 
 
         private char encodeLetterRotorLeftIn(char s)
         {
-            int charVal = ((int)(s) - (int)('A')) % 26;
-            int adjustedVal = (charVal + erLeft.currentPos) % 26;
-         //   System.Diagnostics.Debug.WriteLine(currentRotorLeft);
-            //  System.Diagnostics.Debug.WriteLine(charVal);
-          //  System.Diagnostics.Debug.WriteLine("idx res rotor 3" + adjustedVal);
-           // char sNew = (rotor3in[adjustedVal]);
-            char sNew = (rotorLeft[adjustedVal]);
-          //  System.Diagnostics.Debug.WriteLine((sNew - currentRotorLeft) % 26);
-            //  System.Diagnostics.Debug.WriteLine("res roto 3 " + sNew);
-            return sNew;
+            return encodeLetterIn(s, erLeft);
         }
 
 
@@ -238,21 +227,7 @@ namespace EnigmaMachine
 
         private char encodeLetterRotorLeftOut(char s)
         {
-
             return encodeLetterRotorOut(s, erLeft);
-            //find the character in the string
-         //   int charVal = rotorLeft.IndexOf(s);
-
-         //   char adjustedVal = (char)(charVal + 'A');
-
-         ////   int charVal = ((int)(s) - (int)('A')) % 26;
-         ////   int adjustedVal = (charVal + currentRotorLeft) % 26;
-         ////   System.Diagnostics.Debug.WriteLine(currentRotorLeft);
-         //   //  System.Diagnostics.Debug.WriteLine(charVal);
-         ////   System.Diagnostics.Debug.WriteLine("idx res rotor 3" + adjustedVal);
-         //   char sNew = adjustedVal;
-         // //  System.Diagnostics.Debug.WriteLine("res roto 3 " + sNew);
-         //   return sNew;
         }
 
         private char encodeLetterReflector(char s)
