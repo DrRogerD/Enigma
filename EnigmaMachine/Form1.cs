@@ -18,10 +18,10 @@ namespace EnigmaMachine
      //   const string testStringDecrypt = "LLOALLRFSHLQZCTFEQEXIKEP";
 
 
-        const string testString = "PENGU"; //for I, II, III ring pos AAA, initial AAA
+        const string testString = "PENGUINSKNOWYOURTHOUGHTS"; //for I, II, III ring pos AAA, initial AAA
                                                               //  const string testString = "b";
-        const string testStringDecrypt = "LLOAL";
-
+        const string testStringDecrypt = "LLOALLRFQHLNZLTJIHGXEDCB";
+        //                                LLOALLRFSHLQZCTFEQEXIKEP
         //   const string rotorZ =   "01234567890123456789012345";
         const string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string rotorI =   "EKMFLGDQVZNTOWYHXUSPAIBRCJ"; //I
@@ -51,9 +51,9 @@ namespace EnigmaMachine
         const string plugboard1 = "";
         const string plugboard2= "";
 
-        const int initialPositionRotor1 = 0;
-        const int initialPositionRotor2 = 0;
-        const int initialPositionRotor3 = 0;
+        const int initialPositionRotorRight =0;
+        const int initialPositionRotorMid = 0;
+        const int initialPositionRotorLeft = 0;
 
       //  int currentRotorRight;
       //  int currentRotorMid;
@@ -68,15 +68,15 @@ namespace EnigmaMachine
             //rotorLeft = rotorI;
             //rotorMid = rotorII;
             //rotorRight = rotorIII;
-            erRight = new EnigmaRotor(rotorIII, rotorIIINotch, initialPositionRotor1);
-            erMid = new EnigmaRotor(rotorII, rotorIINotch, initialPositionRotor2);
-            erLeft = new EnigmaRotor(rotorI, rotorINotch, initialPositionRotor3);
+          
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            
-             startConversion(this.textBox2.Text);
+            erRight = new EnigmaRotor(rotorIII, rotorIIINotch, initialPositionRotorRight);
+            erMid = new EnigmaRotor(rotorII, rotorIINotch, initialPositionRotorMid);
+            erLeft = new EnigmaRotor(rotorI, rotorINotch, initialPositionRotorLeft);
+            startConversion(this.textBox2.Text);
 
            // startConversion(testStringDecrypt);
         }
@@ -170,7 +170,12 @@ namespace EnigmaMachine
             int charVal = ((int)(s) - (int)('A')) % 26;
             int adjustedVal = (charVal + er.currentPos) % 26;
             char sNew = (er.rotorLayout[adjustedVal]);
-            return (char)(sNew - er.currentPos);
+            char tmp = (char)(sNew - er.currentPos);
+            if (tmp<65)
+            {
+                tmp = (char)(tmp + 26);
+            }
+            return tmp;
         }
 
         private char encodeLetterRotorRightIn(char s)
@@ -194,13 +199,21 @@ namespace EnigmaMachine
         {
             char adjChar = (char)(s + er.currentPos);
             System.Diagnostics.Debug.WriteLine("adjChar is " + adjChar);
-
+            if (adjChar > 90)
+            {
+                adjChar = (char)(adjChar - 26);
+            }
+            System.Diagnostics.Debug.WriteLine("re-adjChar is " + adjChar);
 
             //find the character in the string
             int charVal = er.rotorLayout.IndexOf(adjChar);
 
 
-            char adjustedVal = (char)(charVal + 'A');
+            char adjustedVal = (char)((charVal + 'A'));
+            if (adjustedVal>90)
+            {
+                adjustedVal = (char)(adjustedVal - 26);
+            }
             //   int charVal = ((int)(s) - (int)('A')) % 26;
             //   int adjustedVal = (charVal + currentRotorLeft) % 26;
             //   System.Diagnostics.Debug.WriteLine(currentRotorLeft);
@@ -211,6 +224,10 @@ namespace EnigmaMachine
 
             //need to move the letter found, back by the rotor position
             char sAfterAdj = (char)(sNew - er.currentPos);
+            if (sAfterAdj<65)
+            {
+                sAfterAdj = (char)(sAfterAdj + 26);
+            }
             return sAfterAdj;
         }
 
